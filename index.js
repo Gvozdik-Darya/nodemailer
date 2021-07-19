@@ -16,7 +16,6 @@ app.post("/registration", (req, res) => {
       login: ${req.body.email}
       password: ${req.body.pass}`,
   };
-  console.log(message);
   mailer(message);
 });
 
