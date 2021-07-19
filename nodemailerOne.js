@@ -1,26 +1,29 @@
-const nodemailerConst = require("nodemailer");
+const nodemailer = require("nodemailer");
 
-const transporter = nodemailerConst.createTransport(
-  {
-    host: "smtp.ethereal.email",
-    port: 587,
-    secure: false,
-    auth: {
-      user: "annetta.schumm83@ethereal.email",
-      pass: "BhcUKRZsRDB6sGZQm1",
+async function mailer(message) {
+  let testAccount = await nodemailer.createTestAccount();
+
+  let transporter = nodemailer.createTransport(
+    {
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: testAccount.user, // generated ethereal user
+        pass: testAccount.pass, // generated ethereal password
+      },
     },
-  },
-  {
-    from: "Mailer Test <annetta.schumm83@ethereal.email>",
-  }
-);
+    {
+      from: `Mailer Test <${testAccount.user}>`,
+    }
+  );
 
-const mailer = (message) => {
-  console.log("need to send message");
-  transporter.sendMail(message, (err, info) => {
-    if (err) return console.log(err);
-    console.log("Email sent: ", info);
-  });
-};
+  let info = await transporter.sendMail(message);
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  // Preview only available when sending through an Ethereal account
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+}
 
 module.exports = mailer;
