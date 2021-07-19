@@ -17,7 +17,7 @@ async function mailer(message) {
       from: `Mailer Test <${testAccount.user}>`,
     }
   );
-  transporter.verify(() => {
+  transporter.verify((err, success) => {
     if (err) {
       console.log(err);
     } else {
