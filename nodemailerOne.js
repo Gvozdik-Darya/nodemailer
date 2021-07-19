@@ -17,13 +17,18 @@ async function mailer(message) {
       from: `Mailer Test <${testAccount.user}>`,
     }
   );
-  transporter.verify((err, success) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("Server is ready to take our messages");
-    }
-  });
+  if (transporter) {
+    console.log("transporter is true");
+    transporter.verify((err, success) => {
+      console.log("verify");
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Server is ready to take our messages");
+      }
+    });
+  }
+
   let info = await transporter.sendMail(message);
   console.log("Message sent: %s", info.messageId);
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
